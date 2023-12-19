@@ -3,9 +3,9 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NoPage from "./pages/NoPage";
 import Home from './pages/Home';
-import Login from './pages/Login';
-import Layout from './pages/Layout';
-import Signup from './pages/Signup';
+import Login from './pages/LoginPage';
+import Layout from './pages/LayoutPage';
+import Signup from './pages/SignupPage';
 
 function App() {
   return (

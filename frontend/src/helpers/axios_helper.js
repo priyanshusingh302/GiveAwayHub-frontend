@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export const getAuthToken = () => {
     return window.localStorage.getItem('auth_token');
 };
