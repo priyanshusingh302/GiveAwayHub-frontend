@@ -25,6 +25,7 @@ function AuthNavBar() {
         };
         setState(temp);
         removeAuthToken();
+        localStorage.removeItem('user');
         navigate('/login');
     };
 

@@ -14,7 +14,7 @@ import { login } from '../apis/login';
 import { setAuthHeader } from '../helpers/axios_helper';
 import AuthContext from '../helpers/AuthContext';
 import CloseIcon from '@mui/icons-material/Close';
-import { useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function Copyright(props) {
   return (
@@ -53,9 +53,10 @@ export default function Login() {
         data: res.data.user
       };
       setState(userData);
-      setErrorText({ error: false, errorText: "" })
+      localStorage.setItem('user', JSON.stringify(userData));
+      setErrorText({ error: false, errorText: "" });
       setAuthHeader(res.data.token);
-      navigate('/items');
+      // navigate('/items');
     }
     else {
       setErrorText({ error: true, errorText: "Invalid Credentials" })
@@ -120,8 +121,10 @@ export default function Login() {
                       </Link>
                     </Grid>
                     <Grid item>
-                      <Link href="/signup" variant="body2">
-                        {"Don't have an account? Sign Up"}
+                      <Link variant="body2">
+                        <NavLink to="/signup" style={{ textDecoration: 'none', color: 'inherit' }}>
+                          {"Don't have an account? Sign Up"}
+                        </NavLink>
                       </Link>
                     </Grid>
                   </Grid>
