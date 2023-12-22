@@ -14,6 +14,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { signup } from '../apis/signup';
 import AuthContext from '../helpers/AuthContext';
 import { setAuthHeader } from '../helpers/axios_helper';
+import CloseIcon from '@mui/icons-material/Close';
 
 function Copyright(props) {
   return (
@@ -101,7 +102,7 @@ export default function Signup() {
       navigate('/items');
     }
     else {
-      setErrorText({ error: true, errorText: "Invalid Credentials" })
+      setErrorText({ error: true, errorText: "Signup Error!" })
     }
   };
 
@@ -213,7 +214,22 @@ export default function Signup() {
                 >
                   Sign Up
                 </Button>
-                {console.log(form)}
+                {
+                  signupError.error ? <>
+                    <div style={{ justifyContent: "center", alignItems: "center"  }}>
+                      <div style={{ backgroundColor: "#EF5350", borderRadius: 5, padding: 5, paddingRight: 10, display: "flex", alignItems: "center" }}>
+                        <span style={{ flex: 1, marginLeft: 5 }}> {signupError.errorText}</span>
+                        <div
+                          onMouseOver={(e) => (e.target.style.backgroundColor = "#D32F2F")}
+                          onMouseOut={(e) => (e.target.style.backgroundColor = "#EF5350")}
+                          onClick={() => (setErrorText({ error: false, errorText: "" }))}>
+                          <CloseIcon style={{ verticalAlign: "middle" }} />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                    : null
+                }
                 <Grid container justifyContent="flex-end">
                   <Grid item>
                     <Link variant="body2" >

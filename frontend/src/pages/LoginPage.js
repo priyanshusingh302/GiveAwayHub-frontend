@@ -56,7 +56,7 @@ export default function Login() {
       localStorage.setItem('user', JSON.stringify(userData));
       setErrorText({ error: false, errorText: "" });
       setAuthHeader(res.data.token);
-      // navigate('/items');
+      navigate('/items');
     }
     else {
       setErrorText({ error: true, errorText: "Invalid Credentials" })
