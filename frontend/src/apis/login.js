@@ -1,14 +1,20 @@
-import { request } from "../helpers/axios_helper";
+import axios from "axios";
 
-const login= async (cred)=>{
-    try{
-        const response = await request('post','/login',cred);
-        return {success:true,data:response.data};
+const url = `/login`;
+
+const login = async (cred) => {
+    try {
+        const response = await axios({
+            method: 'post',
+            url,
+            data: cred
+        })
+        return { success: true, data: response.data };
     }
-    catch(err){
-        console.log(err)
-        return {success:false,data:{}};
+    catch (err) {
+        console.log(err);
+        return { success: false, data: {} };
     }
 }
 
-export {login}
+export { login }
