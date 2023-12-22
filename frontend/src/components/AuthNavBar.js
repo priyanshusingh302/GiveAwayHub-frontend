@@ -30,9 +30,9 @@ function AuthNavBar() {
 
 
     return (
-        <AppBar position="static">
-            <Container maxWidth="xl">
-                <Toolbar disableGutters>
+        <AppBar position="static" >
+            <Container maxWidth="xl" >
+                <Toolbar disableGutters  >
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
                     <Typography
                         variant="h6"
@@ -59,6 +59,11 @@ function AuthNavBar() {
                         </Button>
                     </Box>
 
+                    <Button color="inherit" >
+                        <Link to="/history" style={{ textDecoration: 'none', color: 'inherit' }}>
+                            History
+                        </Link>
+                    </Button>
                     <Button color="inherit" onClick={handleSignOut}>
                         SignOut
                     </Button>

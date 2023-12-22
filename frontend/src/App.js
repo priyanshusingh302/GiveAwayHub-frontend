@@ -12,6 +12,7 @@ import AuthNavBar from './components/AuthNavBar';
 import { useContext } from 'react';
 import AuthContext from './helpers/AuthContext';
 import ItemsPage from './pages/ItemsPage';
+import HistoryPage from './pages/HistoryPage';
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
           <Route path="login" element={<Login />} />
           <Route path="items" element={<ItemsPage />} />
           <Route path="signup" element={<Signup />} />
+          <Route path="history" element={<HistoryPage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
