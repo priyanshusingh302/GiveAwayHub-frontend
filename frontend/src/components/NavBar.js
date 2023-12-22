@@ -9,33 +9,44 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import AdbIcon from '@mui/icons-material/Adb';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function NavBar() {
 
+  const navigate = useNavigate();
 
   return (
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
+          <button style={{
+            color: "white",
+            backgroundColor: "transparent",
+            backgroundRepeat: "no-repeat",
+            border: "none",
+            cursor: "pointer",
+            overflow: "hidden"
+          }}
+            onClick={() => (navigate("/home"))}
           >
-            GiveAwayHub
-          </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              GiveAwayHub
+            </Typography>
+          </button>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button color="inherit">
@@ -50,7 +61,7 @@ function NavBar() {
               Signup
             </Link>
           </Button>
-          
+
           <Button color="inherit">
             <Link to="/login" style={{ textDecoration: 'none', color: 'inherit' }}>
               Login

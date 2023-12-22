@@ -16,6 +16,7 @@ import { removeAuthToken } from '../helpers/axios_helper';
 
 function AuthNavBar() {
     const setState = React.useContext(AuthContext).setState;
+    const authState = React.useContext(AuthContext).state;
     const navigate = useNavigate();
 
     const handleSignOut = () => {
@@ -35,22 +36,32 @@ function AuthNavBar() {
             <Container maxWidth="xl" >
                 <Toolbar disableGutters  >
                     <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-                    <Typography
-                        variant="h6"
-                        noWrap
-                        component="a"
-                        href="#app-bar-with-responsive-menu"
-                        sx={{
-                            mr: 2,
-                            display: { xs: 'none', md: 'flex' },
-                            fontFamily: 'monospace',
-                            fontWeight: 700,
-                            color: 'inherit',
-                            textDecoration: 'none',
-                        }}
+                    <button style={{
+                        color: "white",
+                        backgroundColor: "transparent",
+                        backgroundRepeat: "no-repeat",
+                        border: "none",
+                        cursor: "pointer",
+                        overflow: "hidden"
+                    }}
+                        onClick={() => (navigate("/home"))}
                     >
-                        GiveAwayHub
-                    </Typography>
+                        <Typography
+                            variant="h6"
+                            noWrap
+                            component="a"
+                            sx={{
+                                mr: 2,
+                                display: { xs: 'none', md: 'flex' },
+                                fontFamily: 'monospace',
+                                fontWeight: 700,
+                                color: 'inherit',
+                                textDecoration: 'none',
+                            }}
+                        >
+                            GiveAwayHub
+                        </Typography>
+                    </button>
 
                     <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
                         <Button color="inherit">
@@ -70,9 +81,9 @@ function AuthNavBar() {
                     </Button>
 
                     <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton sx={{ p: 0, marginLeft: 1, marginRight: 1 }}>
-                                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                        <Tooltip title="Profile" >
+                            <IconButton sx={{ p: 0, marginLeft: 1, marginRight: 1 }} onClick={() => (navigate('/profile'))}>
+                                <Avatar alt={authState.data.firstName} src="/static/images/avatar/2.jpg" />
                             </IconButton>
                         </Tooltip>
                     </Box>

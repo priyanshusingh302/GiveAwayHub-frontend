@@ -13,6 +13,7 @@ import { useContext } from 'react';
 import AuthContext from './helpers/AuthContext';
 import ItemsPage from './pages/ItemsPage';
 import HistoryPage from './pages/HistoryPage';
+import ProfilePage from './pages/ProfilePage';
 
 function App() {
 
@@ -22,10 +23,12 @@ function App() {
       {!authState.isLoggedIn ? <NavBar /> : <AuthNavBar />}
       <Routes>
         <Route path="/" element={<Layout />}>
+          <Route path="home" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="items" element={<ItemsPage />} />
           <Route path="signup" element={<Signup />} />
           <Route path="history" element={<HistoryPage />} />
+          <Route path="profile" element={<ProfilePage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>

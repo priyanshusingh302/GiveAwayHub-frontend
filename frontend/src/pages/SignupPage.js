@@ -93,7 +93,7 @@ export default function Signup() {
     if (res.success) {
       const userData = {
         isLoggedIn: true,
-        data: res.data.user
+        data: res.data
       };
       setState(userData);
       localStorage.setItem('user', JSON.stringify(userData));
