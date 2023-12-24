@@ -32,27 +32,33 @@ const ProfilePage = () => {
     });
 
     const getData = async () => {
-        const response = await request("get", `/user/42a4950b-a778-4963-9383-e24bb5de230c`, null);
-        if (response.success) {
-            console.log(response.data);
-            setForm({
-                firstName: response.data.firstName,
-                lastName: response.data.lastName,
-                email: response.data.email,
-                phoneNumber: response.data.phoneNumber,
-                gender: response.data.gender,
-                address: response.data.address,
-                dateOfBirth: response.data.dateOfBirth,
-                password: response.data.password,
-                re_password: response.data.password
-            });
-            console.log(form);
-        }
-        else {
-            console.log("Error!!!")
+        if (authState.isLoggedIn) {
+            console.log(authState.data)
+            const response = await request("get", `/user/${authState.data.id}`, null);
+            if (response.success) {
+                console.log(response.data);
+                setForm({
+                    firstName: response.data.firstName,
+                    lastName: response.data.lastName,
+                    email: response.data.email,
+                    phoneNumber: response.data.phoneNumber,
+                    gender: response.data.gender,
+                    address: response.data.address,
+                    dateOfBirth: response.data.dateOfBirth,
+                    password: response.data.password,
+                    re_password: response.data.password
+                });
+            }
+            else {
+                console.log("Error!!!")
+            }
         }
     }
 
+
+    useEffect(() => {
+        getData();
+    }, [authState])
 
     const handleFormChange = (e) => {
         setForm({
@@ -75,178 +81,193 @@ const ProfilePage = () => {
             form.gender !== "" &&
             form.password !== "" &&
             form.re_password !== "" &&
-            form.dateOfBirth !== "";
+            form.dateOfBirth !== "" &&
+            form.firstName !== null &&
+            form.lastName !== null &&
+            form.phoneNumber !== null &&
+            form.address !== null &&
+            form.gender !== null &&
+            form.password !== null &&
+            form.re_password !== null &&
+            form.dateOfBirth !== null;
         return validatePassword() && validatePhoneNumber() && flag;
     }
 
     return (
-        <Container maxWidth="lg" sx={{ minHeight: "90vh", borderRadius: 1, mt: 1, p: 5, display: "flex", flexDirection: "row" }}>
-            <Box sx={{ mr: 5 }} width={300} display="flex" flexDirection="column" alignItems="center" alignContent="center" gap={4}>
-                <Box width={250} height={250} sx={{
-                    bgcolor: "white", mt: 5, display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    border: 2,
-                    borderColor: "#dddddd"
-                }}>
-                    <img
-                        style={{
-                            objectFit: "fill",
-                            height: 250,
-                            width: 250
-                        }}
-                        src={image}
-                        alt="No Profile Photo"
-                    />
-                </Box>
-                <Button
-                    variant="contained"
-                    component="label"
-                >
-                    Upload Image
-                    <input
-                        type="file"
-                        hidden
-                        onChange={(newImage) => (setImage(newImage.target.files[0]))}
-                    />
-                </Button>
-                {console.log(image)}
-            </Box>
-            <Box width={800} display="flex" flexDirection="column" alignItems="center" gap={4}>
-                <Grid container spacing={2}>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            autoComplete="given-name"
-                            name="firstName"
-                            value={form.firstName}
-                            required
-                            fullWidth
-                            onChange={handleFormChange}
-                            id="firstName"
-                            label="First Name"
-                            autoFocus
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            fullWidth
-                            onChange={handleFormChange}
-                            value={form.lastName}
-                            id="lastName"
-                            label="Last Name"
-                            name="lastName"
-                            autoComplete="family-name"
-                        />
-                    </Grid>
-                    <Grid
-                        item xs={12} sm={6}>
-                        <TextField
-                            required
-                            fullWidth
-                            disabled
-                            onChange={handleFormChange}
-                            value={form.email}
-                            id="email"
-                            label="Email"
-                            name="email"
-                            autoComplete="email"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            fullWidth
-                            value={form.phoneNumber}
-                            type="tel"
-                            onChange={handleFormChange}
-                            error={form.phoneNumber !== "" && !validatePhoneNumber()}
-                            helperText={((form.phoneNumber !== "") && !validatePhoneNumber()) ? "Invalid Phone Number!" : ""}
-                            id="phoneNumber"
-                            label="Phone Number"
-                            name="phoneNumber"
-                            autoComplete="phoneNumber"
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            multiline
-                            fullWidth
-                            onChange={handleFormChange}
-                            value={form.address}
-                            rows={4}
-                            id="address"
-                            label="Address"
-                            name="address"
-                            autoComplete="address"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
-                            <InputLabel>Gender</InputLabel>
-                            <Select
-                                label="Gender"
-                                name="gender"
-                                onChange={handleFormChange}
-                                value={form.gender}
-                            >
-                                <MenuItem value={"Male"}>Male</MenuItem>
-                                <MenuItem value={"Female"}>Female</MenuItem>
-                                <MenuItem value={"Other"}>Other</MenuItem>
-                            </Select>
-                        </FormControl>
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-in">
-                            <DatePicker
-                                sx={{ width: "100%" }}
-                                inputFormat='DD-MM-YYYY'
-                                name="dateOfBirth"
-                                onChange={(newDOB) => (setForm({ ...form, dateOfBirth: newDOB.format('DD/MM/YYYY') }))}
-                                value={form.dateOfBirth === "" ? null : dayjs(form.dateOfBirth, "DD/MM/YYYY")}
-                                label="Date of Birth"
+        <>{
+            authState.isLoggedIn ?
+                <Container maxWidth="lg" sx={{ minHeight: "90vh", borderRadius: 1, mt: 1, p: 5, display: "flex", flexDirection: "row" }}>
+                    <Box sx={{ mr: 5 }} width={300} display="flex" flexDirection="column" alignItems="center" alignContent="center" gap={4}>
+                        <Box width={250} height={250} sx={{
+                            bgcolor: "white", mt: 5, display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            border: 2,
+                            borderColor: "#dddddd"
+                        }}>
+                            <img
+                                style={{
+                                    objectFit: "fill",
+                                    height: 250,
+                                    width: 250
+                                }}
+                                src={image}
+                                alt="No Profile Photo"
                             />
-                        </LocalizationProvider>
-                    </Grid>
+                        </Box>
+                        <Button
+                            variant="contained"
+                            component="label"
+                        >
+                            Upload Image
+                            <input
+                                type="file"
+                                hidden
+                                onChange={(newImage) => (setImage(newImage.target.files[0]))}
+                            />
+                        </Button>
+                    </Box>
+                    <Box width={800} display="flex" flexDirection="column" alignItems="center" gap={4}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    autoComplete="given-name"
+                                    name="firstName"
+                                    value={form.firstName}
+                                    required
+                                    fullWidth
+                                    onChange={handleFormChange}
+                                    id="firstName"
+                                    label="First Name"
+                                    autoFocus
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    onChange={handleFormChange}
+                                    value={form.lastName}
+                                    id="lastName"
+                                    label="Last Name"
+                                    name="lastName"
+                                    autoComplete="family-name"
+                                />
+                            </Grid>
+                            <Grid
+                                item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    disabled
+                                    onChange={handleFormChange}
+                                    value={form.email}
+                                    id="email"
+                                    label="Email"
+                                    name="email"
+                                    autoComplete="email"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    value={form.phoneNumber}
+                                    type="tel"
+                                    onChange={handleFormChange}
+                                    error={form.phoneNumber !== "" && !validatePhoneNumber()}
+                                    helperText={((form.phoneNumber !== "") && !validatePhoneNumber()) ? "Invalid Phone Number!" : ""}
+                                    id="phoneNumber"
+                                    label="Phone Number"
+                                    name="phoneNumber"
+                                    autoComplete="phoneNumber"
+                                />
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    multiline
+                                    fullWidth
+                                    onChange={handleFormChange}
+                                    value={form.address}
+                                    rows={4}
+                                    id="address"
+                                    label="Address"
+                                    name="address"
+                                    autoComplete="address"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <FormControl fullWidth>
+                                    <InputLabel>Gender</InputLabel>
+                                    <Select
+                                        label="Gender"
+                                        name="gender"
+                                        onChange={handleFormChange}
+                                        value={form.gender}
+                                    >
+                                        <MenuItem value={"Male"}>Male</MenuItem>
+                                        <MenuItem value={"Female"}>Female</MenuItem>
+                                        <MenuItem value={"Other"}>Other</MenuItem>
+                                    </Select>
+                                </FormControl>
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-in">
+                                    <DatePicker
+                                        sx={{ width: "100%" }}
+                                        inputFormat='DD-MM-YYYY'
+                                        name="dateOfBirth"
+                                        onChange={(newDOB) => (setForm({ ...form, dateOfBirth: newDOB.format('DD/MM/YYYY') }))}
+                                        value={form.dateOfBirth === "" ? null : dayjs(form.dateOfBirth, "DD/MM/YYYY")}
+                                        label="Date of Birth"
+                                    />
+                                </LocalizationProvider>
+                            </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    onChange={handleFormChange}
+                                    value={form.password}
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                />
+                            </Grid>
+                            <Grid item xs={12} sm={6}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    onChange={handleFormChange}
+                                    error={(form.password !== "") && !validatePassword()}
+                                    helperText={((form.password !== "") && !validatePassword()) ? "Password does not match!" : ""}
+                                    value={form.re_password}
+                                    name="re_password"
+                                    label="Confirm Password"
+                                    type="password"
+                                    id="re_password"
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
                             fullWidth
-                            onChange={handleFormChange}
-                            value={form.password}
-                            name="password"
-                            label="Password"
-                            type="password"
-                            id="password"
-                        />
-                    </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            required
-                            fullWidth
-                            onChange={handleFormChange}
-                            error={(form.password !== "") && !validatePassword()}
-                            helperText={((form.password !== "") && !validatePassword()) ? "Password does not match!" : ""}
-                            value={form.re_password}
-                            name="re_password"
-                            label="Confirm Password"
-                            type="password"
-                            id="re_password"
-                        />
-                    </Grid>
-                </Grid>
-                <Button
-                    type="submit"
-                    fullWidth
-                    disabled={!validateForm()}
-                    variant="contained"
-                    sx={{ mt: 3, mb: 2 }}
-                >
-                    Update Details
-                </Button>
-            </Box>
-        </Container>
+                            disabled={!validateForm()}
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Update Details
+                        </Button>
+                    </Box>
+                </Container> :
+                <>
+                    <div>
+                        Not Logged In!!!
+                    </div>
+                </>}
+        </>
     );
 };
 
