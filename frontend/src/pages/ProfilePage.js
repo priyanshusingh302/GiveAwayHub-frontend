@@ -33,10 +33,8 @@ const ProfilePage = () => {
 
     const getData = async () => {
         if (authState.isLoggedIn) {
-            console.log(authState.data)
             const response = await request("get", `/user/${authState.data.id}`, null);
             if (response.success) {
-                console.log(response.data);
                 setForm({
                     firstName: response.data.firstName,
                     lastName: response.data.lastName,
@@ -59,6 +57,28 @@ const ProfilePage = () => {
     useEffect(() => {
         getData();
     }, [authState])
+
+    const handleSubmit = async () => {
+        const data = {
+            id: authState.data.id,
+            firstName: form.firstName,
+            lastName: form.lastName,
+            email: form.email,
+            phoneNumber: form.phoneNumber,
+            gender: form.gender,
+            address: form.address,
+            dateOfBirth: form.dateOfBirth,
+            password: form.password
+        }
+        const response = await request("post","/user/update",data);
+        if(response.success){
+            alert("Details Updated Succesfully!!");
+            return null;
+        }
+        else{
+            alert("Error!!");
+        }
+    }
 
     const handleFormChange = (e) => {
         setForm({
@@ -255,6 +275,7 @@ const ProfilePage = () => {
                             type="submit"
                             fullWidth
                             disabled={!validateForm()}
+                            onClick={handleSubmit}
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}
                         >

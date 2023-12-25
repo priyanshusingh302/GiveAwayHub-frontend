@@ -1,22 +1,61 @@
-import { Box, List, ListItem, Paper, Typography } from "@mui/material";
+import { Box, Grid, List, ListItem, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../helpers/AuthContext";
+import { request } from "../helpers/axios_helper";
 
-var numberList = [1, 2, 3, 4, 5];
 
 const MyCard = ({ item }) => {
 
     return (
         <>
             <Paper elevation={2}>
-                <div style={{ width: 460, height: 80 }}>
-                    {item}
-                </div>
+                <Box width={440} height={55} p={1} pl={2}>
+                    <Grid container spacing={1}>
+                        <Grid item xs={6}>
+                            <b>Name :</b> {item.name}
+                        </Grid>
+                        <Grid item xs={6}>
+                            <b>Age :</b> {item.yearOfUse}
+                        </Grid>
+                        <Grid item xs={6}>
+                            <b>Category :</b> {item.category}
+                        </Grid>
+                        <Grid item xs={6}>
+                            <b>Conditon :</b> {item.condition}
+                        </Grid>
+                    </Grid>
+                </Box>
             </Paper>
         </>
     )
 };
 
 const HistoryPage = () => {
+    const [loading, setLoading] = useState(false);
+    const [gave, setGave] = useState([]);
+    const [taken, setTaken] = useState([]);
+    const authState = useContext(AuthContext).state;
+
+    const getData = async () => {
+        if (authState.isLoggedIn) {
+            const response = await request("get", `/log/${authState.data.id}`, null);
+            if (response.success) {
+                console.log(response.data);
+                setGave(response.data.gave);
+                setTaken(response.data.taken);
+            }
+            else {
+                console.log("API error!");
+            }
+        }
+    }
+
+    useEffect(() => {
+        setLoading(true);
+        getData();
+        setLoading(false);
+    }, [authState])
 
     return (<>
         <Container sx={{ minHeight: "90vh", mt: 1, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center" }}>
@@ -39,10 +78,10 @@ const HistoryPage = () => {
                     >
                         Gave Away
                     </Typography>
-                    <List style={{ maxHeight: '90%', overflow: 'auto' }} >
-                        {numberList.map(item =>
+                    <List style={{ maxHeight: '90%', overflow: 'auto'}} >
+                        {gave.map(item =>
                         (
-                            <ListItem>
+                            <ListItem key={item.id}>
                                 <MyCard item={item} />
                             </ListItem>
                         ))}
@@ -60,9 +99,9 @@ const HistoryPage = () => {
                         Taken
                     </Typography>
                     <List style={{ maxHeight: '90%', overflow: 'auto' }}>
-                        {numberList.map(item =>
+                        {taken.map(item =>
                         (
-                            <ListItem>
+                            <ListItem key={item.id}>
                                 <MyCard item={item} />
                             </ListItem>
                         ))}
