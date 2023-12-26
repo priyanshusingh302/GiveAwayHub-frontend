@@ -96,6 +96,7 @@ const ProfilePage = () => {
     const validateForm = () => {
         const flag = form.firstName !== "" &&
             form.lastName !== "" &&
+            form.email !== "" &&
             form.phoneNumber !== "" &&
             form.address !== "" &&
             form.gender !== "" &&
@@ -104,6 +105,7 @@ const ProfilePage = () => {
             form.dateOfBirth !== "" &&
             form.firstName !== null &&
             form.lastName !== null &&
+            form.email !== null &&
             form.phoneNumber !== null &&
             form.address !== null &&
             form.gender !== null &&

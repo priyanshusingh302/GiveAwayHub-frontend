@@ -33,7 +33,10 @@ export const request = async (method, url, data) => {
     }
     catch (err) {
         console.log(err);
+        if (err.response.data?.message ===  "Unauthorized path") {
+            removeAuthToken();
+            window.localStorage.removeItem('user');
+        }
         return { success: false, data: {} };
-
     }
 };
