@@ -15,6 +15,7 @@ import { signup } from '../apis/signup';
 import AuthContext from '../helpers/AuthContext';
 import { setAuthHeader } from '../helpers/axios_helper';
 import CloseIcon from '@mui/icons-material/Close';
+import { hash } from '../helpers/HashGenerator';
 
 function Copyright(props) {
   return (
@@ -86,7 +87,7 @@ export default function Signup() {
       lastName: form.lastName,
       email: form.email,
       phoneNumber: form.phoneNumber,
-      password: form.password
+      password: hash(form.password)
     };
 
     const res = await signup(user);
@@ -216,7 +217,7 @@ export default function Signup() {
                 </Button>
                 {
                   signupError.error ? <>
-                    <div style={{ justifyContent: "center", alignItems: "center"  }}>
+                    <div style={{ justifyContent: "center", alignItems: "center" }}>
                       <div style={{ backgroundColor: "#EF5350", borderRadius: 5, padding: 5, paddingRight: 10, display: "flex", alignItems: "center" }}>
                         <span style={{ flex: 1, marginLeft: 5 }}> {signupError.errorText}</span>
                         <div

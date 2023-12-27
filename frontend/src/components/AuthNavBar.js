@@ -69,7 +69,13 @@ function AuthNavBar() {
                                 Products
                             </Link>
                         </Button>
+                        <Button color="inherit" >
+                            <Link to="/give" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                Give Away
+                            </Link>
+                        </Button>
                     </Box>
+
 
                     <Button color="inherit" >
                         <Link to="/history" style={{ textDecoration: 'none', color: 'inherit' }}>

@@ -10,19 +10,19 @@ const MyCard = ({ item }) => {
     return (
         <>
             <Paper elevation={2}>
-                <Box width={440} height={55} p={1} pl={2}>
+                <Box width={440} minHeight={55} p={1} pl={2}>
                     <Grid container spacing={1}>
-                        <Grid item xs={6}>
-                            <b>Name :</b> {item.name}
+                        <Grid item xs={7}>
+                            <b>Name:</b> {item.name}
                         </Grid>
-                        <Grid item xs={6}>
-                            <b>Age :</b> {item.yearOfUse}
+                        <Grid item xs={5}>
+                            <b>Age:</b> {item.yearOfUse}
                         </Grid>
-                        <Grid item xs={6}>
-                            <b>Category :</b> {item.category}
+                        <Grid item xs={7}>
+                            <b>Category:</b> {item.category}
                         </Grid>
-                        <Grid item xs={6}>
-                            <b>Conditon :</b> {item.condition}
+                        <Grid item xs={5}>
+                            <b>Conditon:</b> {item.condition}
                         </Grid>
                     </Grid>
                 </Box>
@@ -76,9 +76,9 @@ const HistoryPage = () => {
                         fontWeight="bold"
                         fontFamily='monospace'
                     >
-                        Gave Away
+                        Given
                     </Typography>
-                    <List style={{ maxHeight: '90%', overflow: 'auto'}} >
+                    <List style={{ maxHeight: '88%', overflow: 'auto'}} >
                         {gave.map(item =>
                         (
                             <ListItem key={item.id}>

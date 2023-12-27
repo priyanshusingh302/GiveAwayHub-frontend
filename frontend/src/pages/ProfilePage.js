@@ -9,6 +9,7 @@ import dayjs from "dayjs";
 import 'dayjs/locale/en-in';
 import AuthContext from "../helpers/AuthContext";
 import { request } from "../helpers/axios_helper";
+import { hash } from "../helpers/HashGenerator";
 
 
 const ProfilePage = () => {
@@ -43,8 +44,8 @@ const ProfilePage = () => {
                     gender: response.data.gender,
                     address: response.data.address,
                     dateOfBirth: response.data.dateOfBirth,
-                    password: response.data.password,
-                    re_password: response.data.password
+                    password: "",
+                    re_password: ""
                 });
             }
             else {
@@ -68,8 +69,9 @@ const ProfilePage = () => {
             gender: form.gender,
             address: form.address,
             dateOfBirth: form.dateOfBirth,
-            password: form.password
+            password: hash(form.password)
         }
+        console.log(data);
         const response = await request("post","/user/update",data);
         if(response.success){
             alert("Details Updated Succesfully!!");

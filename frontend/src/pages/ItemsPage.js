@@ -1,8 +1,11 @@
+import { Container } from "@mui/system";
 
 
 const ItemsPage = () => {
     return (
-        <h1>Items Page</h1>
+        <Container maxWidth="lg" sx={{ minHeight: "90vh", mt: 1, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center" }}>
+            item page
+        </Container>
     );
 };
 

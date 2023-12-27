@@ -28,7 +28,7 @@ const NoPage = () => {
                         >
                             The page you’re looking for doesn’t exist.
                         </Typography>
-                        <Button sx={{ mt: 1 }} variant="outlined" onClick={() => (navigate("/"))}>
+                        <Button sx={{ mt: 1 }} variant="outlined" onClick={() => (navigate("/home"))}>
                             Back Home
                         </Button>
                     </Grid>

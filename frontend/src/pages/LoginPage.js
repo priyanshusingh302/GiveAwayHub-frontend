@@ -15,6 +15,7 @@ import { setAuthHeader } from '../helpers/axios_helper';
 import AuthContext from '../helpers/AuthContext';
 import CloseIcon from '@mui/icons-material/Close';
 import { NavLink, useNavigate } from 'react-router-dom';
+import { hash } from '../helpers/HashGenerator';
 
 function Copyright(props) {
   return (
@@ -44,7 +45,7 @@ export default function Login() {
     const data = new FormData(event.currentTarget);
     const cred = {
       "email": data.get('email'),
-      "password": data.get('password'),
+      "password": hash(data.get('password')),
     };
     const res = await login(cred);
     if (res.success) {

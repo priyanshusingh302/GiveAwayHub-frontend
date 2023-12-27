@@ -1,12 +1,10 @@
 import './App.css';
-import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NoPage from "./pages/NoPage";
 import Home from './pages/Home';
 import Login from './pages/LoginPage';
 import Layout from './pages/LayoutPage';
 import Signup from './pages/SignupPage';
-import AuthState from './helpers/AuthState';
 import NavBar from './components/NavBar';
 import AuthNavBar from './components/AuthNavBar';
 import { useContext } from 'react';
@@ -14,6 +12,7 @@ import AuthContext from './helpers/AuthContext';
 import ItemsPage from './pages/ItemsPage';
 import HistoryPage from './pages/HistoryPage';
 import ProfilePage from './pages/ProfilePage';
+import GivePage from './pages/GivePage';
 
 function App() {
 
@@ -29,6 +28,7 @@ function App() {
           <Route path="signup" element={<Signup />} />
           <Route path="history" element={<HistoryPage />} />
           <Route path="profile" element={<ProfilePage />} />
+          <Route path="give" element={<GivePage />} />
           <Route path="*" element={<NoPage />} />
         </Route>
       </Routes>
