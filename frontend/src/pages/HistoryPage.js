@@ -98,7 +98,7 @@ const HistoryPage = () => {
                     >
                         Taken
                     </Typography>
-                    <List style={{ maxHeight: '90%', overflow: 'auto' }}>
+                    <List style={{ maxHeight: '88%', overflow: 'auto' }}>
                         {taken.map(item =>
                         (
                             <ListItem key={item.id}>
