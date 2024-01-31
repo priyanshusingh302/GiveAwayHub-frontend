@@ -8,17 +8,20 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from "dayjs";
 import 'dayjs/locale/en-in';
 import AuthContext from "../helpers/AuthContext";
-import { request } from "../helpers/axios_helper";
+import { getAuthToken, request } from "../helpers/axios_helper";
 import { hash } from "../helpers/HashGenerator";
+import axios from "axios";
 
 
 const ProfilePage = () => {
     const randomImageId = Math.floor(Math.random() * 1000) + 1;
-    const srcImg = `https://picsum.photos/id/${randomImageId}/300/200`;
+    // const srcImg = `https://picsum.photos/id/${randomImageId}/300/200`;
 
     const authState = useContext(AuthContext).state;
 
-    const [image, setImage] = useState(srcImg);
+
+    const [imagePreview, setImagePreview] = useState(null);
+    const [image, setImage] = useState(null);
 
     const [form, setForm] = React.useState({
         firstName: "",
@@ -51,6 +54,17 @@ const ProfilePage = () => {
             else {
                 console.log("Error!!!")
             }
+            const img = await request("get", `/image/${authState.data.id}`, null);
+            if (img.success) {
+                // console.log(img.data);
+                const blob = new Blob([img.data], { type: 'image/png' });
+                console.log(blob);
+                // const imgURL = URL.createObjectURL(`data:image/png;base64,${blob}`);
+                // setImagePreview(imgURL);
+            }
+            else {
+                console.log("Image fetch failed!!")
+            }
         }
     }
 
@@ -72,12 +86,12 @@ const ProfilePage = () => {
             password: hash(form.password)
         }
         console.log(data);
-        const response = await request("post","/user/update",data);
-        if(response.success){
+        const response = await request("post", "/user/update", data);
+        if (response.success) {
             alert("Details Updated Succesfully!!");
             return null;
         }
-        else{
+        else {
             alert("Error!!");
         }
     }
@@ -116,18 +130,43 @@ const ProfilePage = () => {
             form.dateOfBirth !== null;
         return validatePassword() && validatePhoneNumber() && flag;
     }
+    const handelUpload = () => {
+        if (image !== null) {
+            let formData = new FormData();
+            formData.append("file", image);
+            formData.append("referenceId", authState.data?.id);
+            axios.post(
+                'http://localhost:8080/image/upload',
+                formData,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${getAuthToken()}`,
+                        "Content-type": "multipart/form-data",
+                    },
+                }
+            )
+                .then(res => {
+                    console.log(`Success:` + res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+
+    }
 
     return (
         <>{
             authState.isLoggedIn ?
                 <Container maxWidth="lg" sx={{ minHeight: "90vh", borderRadius: 1, mt: 1, p: 5, display: "flex", flexDirection: "row" }}>
-                    <Box sx={{ mr: 5 }} width={300} display="flex" flexDirection="column" alignItems="center" alignContent="center" gap={4}>
+                    <Box sx={{ mr: 5 }} width={300} display="flex" flexDirection="column" alignItems="center" alignContent="center" gap={2}>
                         <Box width={250} height={250} sx={{
                             bgcolor: "white", mt: 5, display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             border: 2,
-                            borderColor: "#dddddd"
+                            borderColor: "#dddddd",
+                            mb: 2
                         }}>
                             <img
                                 style={{
@@ -135,7 +174,7 @@ const ProfilePage = () => {
                                     height: 250,
                                     width: 250
                                 }}
-                                src={image}
+                                src={imagePreview}
                                 alt="No Profile Photo"
                             />
                         </Box>
@@ -143,12 +182,20 @@ const ProfilePage = () => {
                             variant="contained"
                             component="label"
                         >
-                            Upload Image
+                            Chnage
                             <input
+                                accept="image/*"
                                 type="file"
                                 hidden
-                                onChange={(newImage) => (setImage(newImage.target.files[0]))}
+                                onChange={(newImage) => { setImage(newImage.target.files[0]); setImagePreview(URL.createObjectURL(newImage.target.files[0])) }}
                             />
+                        </Button>
+                        <Button
+                            variant="contained"
+                            component="label"
+                            onClick={handelUpload}
+                        >
+                            Upload
                         </Button>
                     </Box>
                     <Box width={800} display="flex" flexDirection="column" alignItems="center" gap={4}>

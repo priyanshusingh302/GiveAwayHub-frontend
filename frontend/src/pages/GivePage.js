@@ -1,9 +1,10 @@
 
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { Box, Container } from "@mui/system";
+import axios from "axios";
 import React, { useContext, useState } from "react";
 import AuthContext from "../helpers/AuthContext";
-import { request } from "../helpers/axios_helper";
+import { getAuthToken, request } from "../helpers/axios_helper";
 
 const conditions = ["New", "Like New", "Excellent", "Very Good", "Good", "Fair", "Poor"];
 const categories = ['Computers/Laptops', 'Smartphones/Tablets', 'Cameras', 'Audio Equipment', 'Other Electronic Devices', 'Kitchen Appliances', 'Home Appliances', 'Small Appliances', 'Living Room Furniture', 'Bedroom Furniture', 'Kitchen/Dining Furniture', 'Outdoor Furniture', 'Men\'s Clothing', 'Women\'s Clothing', 'Children\'s Clothing', 'Shoes', 'Accessories', 'Books', 'DVDs/Blu-rays', 'CDs/Vinyl Records', 'Toys', 'Board Games', 'Video Games', 'Decor', 'Gardening Tools', 'Home Improvement Items', 'Sporting Equipment', 'Camping Gear', 'Bicycles', 'Baby Gear', 'Kids\' Toys', 'Children\'s Clothing', 'Hand Tools', 'Power Tools', 'Construction Equipment', 'Skincare Products', 'Haircare Products', 'Health and Wellness Items', 'Art Supplies', 'Craft Materials', 'Hobby Equipment', 'Antiques', 'Memorabilia', 'Collectible Items', 'Cars', 'Bikes', 'Auto Parts', 'Miscellaneous'];
@@ -15,7 +16,8 @@ const GiveAway = () => {
 
     const authState = useContext(AuthContext).state;
 
-    const [image, setImage] = useState(srcImg);
+    const [imagePreview, setImagePreview] = useState(srcImg);
+    const [image, setImage] = useState(null);
 
     const [form, setForm] = React.useState({
         name: "",
@@ -54,6 +56,30 @@ const GiveAway = () => {
         console.log(form);
     }
 
+    const handelUpload = () => {
+        if (image !== null) {
+            let formData = new FormData();
+            formData.append("file", image);
+            formData.append("referenceId", authState.data?.id);
+            axios.post(
+                'http://localhost:8080/image/upload',
+                formData,
+                {
+                    headers: {
+                        "Authorization": `Bearer ${getAuthToken()}`,
+                        "Content-type": "multipart/form-data",
+                    },
+                }
+            )
+                .then(res => {
+                    console.log(`Success:` + res.data);
+                })
+                .catch(err => {
+                    console.log(err);
+                })
+        }
+    }
+
 
     return (
         <>{
@@ -73,7 +99,7 @@ const GiveAway = () => {
                                     height: 250,
                                     width: 250
                                 }}
-                                src={image}
+                                src={imagePreview}
                                 alt="No Profile Photo"
                             />
                         </Box>
@@ -83,9 +109,10 @@ const GiveAway = () => {
                         >
                             Upload Image
                             <input
+                                accept="image/*"
                                 type="file"
                                 hidden
-                                onChange={(newImage) => (setImage(newImage.target.files[0]))}
+                                onChange={(newImage) => (setImagePreview(URL.createObjectURL(newImage.target.files[0])))}
                             />
                         </Button>
                     </Box>
