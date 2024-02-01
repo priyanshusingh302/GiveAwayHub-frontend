@@ -1,4 +1,4 @@
-import { Box, Grid, List, ListItem, Paper, Typography } from "@mui/material";
+import { Box, CircularProgress, Grid, List, ListItem, Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../helpers/AuthContext";
@@ -32,18 +32,20 @@ const MyCard = ({ item }) => {
 };
 
 const HistoryPage = () => {
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [gave, setGave] = useState([]);
     const [taken, setTaken] = useState([]);
     const authState = useContext(AuthContext).state;
 
     const getData = async () => {
+        setLoading(true);
         if (authState.isLoggedIn) {
             const response = await request("get", `/log/${authState.data.id}`, null);
             if (response.success) {
                 console.log(response.data);
                 setGave(response.data.gave);
                 setTaken(response.data.taken);
+                setLoading(false);
             }
             else {
                 console.log("API error!");
@@ -52,9 +54,7 @@ const HistoryPage = () => {
     }
 
     useEffect(() => {
-        setLoading(true);
         getData();
-        setLoading(false);
     }, [authState])
 
     return (<>
@@ -78,14 +78,17 @@ const HistoryPage = () => {
                     >
                         Given
                     </Typography>
-                    <List style={{ maxHeight: '88%', overflow: 'auto'}} >
+                    {!loading ? <List style={{ maxHeight: '88%', overflow: 'auto' }} >
                         {gave.map(item =>
                         (
                             <ListItem key={item.id}>
                                 <MyCard item={item} />
                             </ListItem>
                         ))}
-                    </List>
+                    </List> : <Box height="60vh" width={500} sx={{ display: 'flex', alignContent: "center", alignItems: "center", pl: 28 }}>
+                        <CircularProgress />
+                    </Box>
+                    }
                 </Box>
                 <Box border={1} borderColor="#dddddd" height="70vh" width={500} boxShadow={2} borderRadius="10px">
                     <Typography
@@ -98,14 +101,17 @@ const HistoryPage = () => {
                     >
                         Taken
                     </Typography>
-                    <List style={{ maxHeight: '88%', overflow: 'auto' }}>
+                    {!loading ? <List style={{ maxHeight: '88%', overflow: 'auto' }}>
                         {taken.map(item =>
                         (
                             <ListItem key={item.id}>
                                 <MyCard item={item} />
                             </ListItem>
                         ))}
-                    </List>
+                    </List> : <Box height="60vh" width={500} sx={{ display: 'flex', alignContent: "center", alignItems: "center", pl: 28 }}>
+                        <CircularProgress />
+                    </Box>
+                    }
                 </Box>
             </Box>
         </Container>
