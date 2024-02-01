@@ -2,12 +2,15 @@
 import { Box, Card, CardActionArea, Dialog, styled, Typography } from "@mui/material"
 import axios from "axios"
 import Button from '@mui/material/Button';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
 import DialogActions from '@mui/material/DialogActions';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import { request } from "../helpers/axios_helper";
+import AuthContext from "../helpers/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
@@ -19,16 +22,33 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export const ItemCard = ({ item }) => {
+export const ItemCard = ({ item, remove }) => {
 
+    const authState = useContext(AuthContext).state;
     const [open, setOpen] = useState(false);
-
+    const refresh = () => window.location.reload(true)
     const handleClickOpen = () => {
         setOpen(true);
     };
     const handleClose = () => {
         setOpen(false);
     };
+
+    const handelTake = async () => {
+        const data = {
+            "userId": authState.data.id,
+            "itemId": item.id
+        }
+        const response = await request("post", "/item/buy", data);
+        if (response.success) {
+            alert("Item Taken");
+            handleClose();
+            refresh();
+        }
+        else {
+            alert("Error")
+        }
+    }
 
     return (
         <>
@@ -112,7 +132,7 @@ export const ItemCard = ({ item }) => {
                     <CloseIcon />
                 </IconButton>
                 <DialogContent dividers>
-                <Box minHeight={55} sx={{ padding: 1, display: "flex" }} >
+                    <Box minHeight={55} sx={{ padding: 1, display: "flex" }} >
                         <Box width={215} height={215} sx={{
                             bgcolor: "white", display: 'flex',
                             alignItems: 'center',
@@ -162,7 +182,7 @@ export const ItemCard = ({ item }) => {
                     </Box>
                 </DialogContent>
                 <DialogActions>
-                    <Button autoFocus onClick={handleClose}>
+                    <Button autoFocus onClick={handelTake}>
                         Take
                     </Button>
                 </DialogActions>
