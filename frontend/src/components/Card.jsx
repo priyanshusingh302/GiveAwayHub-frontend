@@ -47,6 +47,12 @@ export const ItemCard = ({ item }) => {
                         >
                             Condition: <i>{item.condition}</i>
                         </Typography>
+                        <br /><Typography
+                            variant="h7"
+                            fontFamily={"unset"}
+                        >
+                            Used for <b>{item.yearOfUse}</b> Year
+                        </Typography>
                         <br />
                         <Typography
                             fontSize={12}

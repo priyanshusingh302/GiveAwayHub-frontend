@@ -67,6 +67,7 @@ const GiveAway = () => {
         console.log(form);
     }
 
+    categories.sort();
 
     return (
         <>{

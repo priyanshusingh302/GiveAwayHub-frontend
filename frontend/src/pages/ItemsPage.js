@@ -15,15 +15,15 @@ const marks = [
     },
     {
         value: 10,
-        label: '10 years',
+        label: 'Max',
     }
 ];
 const conditions = ["New", "Like New", "Excellent", "Very Good", "Good", "Fair", "Poor"];
 const categories = ['Computers/Laptops', 'Smartphones/Tablets', 'Cameras', 'Audio Equipment', 'Other Electronic Devices', 'Kitchen Appliances', 'Home Appliances', 'Small Appliances', 'Living Room Furniture', 'Bedroom Furniture', 'Kitchen/Dining Furniture', 'Outdoor Furniture', 'Men\'s Clothing', 'Women\'s Clothing', 'Children\'s Clothing', 'Shoes', 'Accessories', 'Books', 'DVDs/Blu-rays', 'CDs/Vinyl Records', 'Toys', 'Board Games', 'Video Games', 'Decor', 'Gardening Tools', 'Home Improvement Items', 'Sporting Equipment', 'Camping Gear', 'Bicycles', 'Baby Gear', 'Kids\' Toys', 'Children\'s Clothing', 'Hand Tools', 'Power Tools', 'Construction Equipment', 'Skincare Products', 'Haircare Products', 'Health and Wellness Items', 'Art Supplies', 'Craft Materials', 'Hobby Equipment', 'Antiques', 'Memorabilia', 'Collectible Items', 'Cars', 'Bikes', 'Auto Parts', 'Miscellaneous'];
 
 const ItemsPage = () => {
-
-    const [value, setValue] = useState([1, 3]);
+    const [searchValue, setSearchValue] = useState("");
+    const [value, setValue] = useState([0, 10]);
     const [categoryList, setCatL] = useState([]);
     const [conditionList, setConL] = useState([]);
     const [items, setItems] = useState([]);
@@ -44,6 +44,7 @@ const ItemsPage = () => {
         getItems();
     }, []);
 
+    categories.sort();
 
     return (
         <Container maxWidth="xl" sx={{ minHeight: "90vh", mt: 1, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center" }}>
@@ -52,6 +53,7 @@ const ItemsPage = () => {
                     <TextField
                         size="small"
                         fullWidth
+                        onChange={(newVal) => (setSearchValue(newVal.target.value))}
                         label="Search"
                         sx={{ bgcolor: "#EAF4FF", borderRadius: 1 }}
                     />
@@ -133,7 +135,16 @@ const ItemsPage = () => {
                 }}
             >
                 <Grid container spacing={2} >
-                    {items.map(item =>
+                    {items.filter((item) => {
+                        return (
+                            item.name.toLowerCase().includes(searchValue.toLowerCase()) &&
+                            (categoryList.length !== 0 ? categoryList.includes(item.category) : 1) &&
+                            item.yearOfUse >= value[0] &&
+                            (value[1] === 10 ? 1 : item.yearOfUse <= value[1]) &&
+                            (conditionList.length !== 0 ? conditionList.includes(item.condition) : 1)
+                        );
+                    }
+                    ).map(item =>
                     (
                         <Grid item xl={4} xs={12} md={12} lg={6}>
                             <ItemCard item={item} />
