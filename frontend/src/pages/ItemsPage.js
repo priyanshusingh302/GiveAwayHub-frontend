@@ -1,9 +1,7 @@
-
-import { Autocomplete, Box, Checkbox, Slider, Stack, TextField, Typography } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Autocomplete, Box, Chip, Grid, Slider, Stack, TextField } from "@mui/material";
 import { Container } from "@mui/system";
-import { useState } from "react";
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { request } from "../helpers/axios_helper";
 
 const marks = [
     {
@@ -22,51 +20,67 @@ const marks = [
 const conditions = ["New", "Like New", "Excellent", "Very Good", "Good", "Fair", "Poor"];
 const categories = ['Computers/Laptops', 'Smartphones/Tablets', 'Cameras', 'Audio Equipment', 'Other Electronic Devices', 'Kitchen Appliances', 'Home Appliances', 'Small Appliances', 'Living Room Furniture', 'Bedroom Furniture', 'Kitchen/Dining Furniture', 'Outdoor Furniture', 'Men\'s Clothing', 'Women\'s Clothing', 'Children\'s Clothing', 'Shoes', 'Accessories', 'Books', 'DVDs/Blu-rays', 'CDs/Vinyl Records', 'Toys', 'Board Games', 'Video Games', 'Decor', 'Gardening Tools', 'Home Improvement Items', 'Sporting Equipment', 'Camping Gear', 'Bicycles', 'Baby Gear', 'Kids\' Toys', 'Children\'s Clothing', 'Hand Tools', 'Power Tools', 'Construction Equipment', 'Skincare Products', 'Haircare Products', 'Health and Wellness Items', 'Art Supplies', 'Craft Materials', 'Hobby Equipment', 'Antiques', 'Memorabilia', 'Collectible Items', 'Cars', 'Bikes', 'Auto Parts', 'Miscellaneous'];
 
-
-
 const ItemsPage = () => {
 
     const [value, setValue] = useState([1, 3]);
-    const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-    const checkedIcon = <CheckBoxIcon fontSize="small" />;
+    const [categoryList, setCatL] = useState([]);
+    const [conditionList, setConL] = useState([]);
+    const [items, setItems] = useState([]);
+    const fixedOptions1 = [];
+    const fixedOptions2 = [];
+
+    const getItems = async () => {
+        const response = await request("get", "/item/all", null);
+        if (response.success) {
+            setItems(response.data);
+        }
+        else {
+            console.log("error fetching items");
+        }
+    }
+
+    useEffect(() => {
+        getItems();
+    }, []);
+
+
     return (
         <Container maxWidth="xl" sx={{ minHeight: "90vh", mt: 1, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center" }}>
-            <Box sx={{ bgcolor: "#E0EAF4", borderRadius: 2, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", mt: 2, p: 1 }}>
+            <Box sx={{ bgcolor: "#D9EBFF", borderRadius: 2, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", mt: 1, p: 1, boxShadow: 1 }}>
                 <Box width={"100%"} mb={1}>
                     <TextField
                         size="small"
                         fullWidth
-                        title="Search"
                         label="Search"
-                        sx={{ bgcolor: "#F9F9FF", borderRadius: 1 }}
+                        sx={{ bgcolor: "#EAF4FF", borderRadius: 1 }}
                     />
                 </Box>
                 <Stack direction="row" spacing={5}>
                     <Autocomplete
                         multiple
-                        id="checkboxes-tags-demo"
+                        id="fixed-tags-demo"
+                        value={categoryList}
+                        onChange={(event, newValue) => {
+                            setCatL([...fixedOptions1,
+                            ...newValue.filter((option) => fixedOptions1.indexOf(option) === -1),]);
+                        }}
                         options={categories}
-                        disableCloseOnSelect
                         getOptionLabel={(option) => option}
-                        renderOption={(props, option, { selected }) => (
-                            <li {...props}>
-                                <Checkbox
-                                    icon={icon}
-                                    checkedIcon={checkedIcon}
-                                    style={{ marginRight: 8 }}
-                                    checked={selected}
+                        renderTags={(tagValue, getTagProps) =>
+                            tagValue.map((option, index) => (
+                                <Chip
+                                    label={option}
+                                    {...getTagProps({ index })}
                                 />
-                                {option}
-                            </li>
-                        )}
-                        style={{ width: 300 }}
+                            ))
+                        }
+                        style={{ width: 250 }}
                         renderInput={(params) => (
-                            <TextField {...params} label="Category" placeholder="Favorites" />
+                            <TextField {...params} label="Category" />
                         )}
                     />
-                    <Box sx={{ width: 250 }}>
+                    <Box sx={{ width: 250, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", }}>
                         <Slider
-                            // size="small"
                             marks={marks} min={0} max={10}
                             getAriaLabel={() => 'Year of use'}
                             value={value}
@@ -76,13 +90,45 @@ const ItemsPage = () => {
                         />
                     </Box>
 
-                    <TextField
-                        // size="small"
-                        label="Condition"
-                        sx={{ bgcolor: "#F9F9FF", borderRadius: 1 }}
+                    <Autocomplete
+                        multiple
+                        id="fixed-tags-demo"
+                        value={conditionList}
+                        onChange={(event, newValue) => {
+                            setConL([...fixedOptions2,
+                            ...newValue.filter((option) => fixedOptions2.indexOf(option) === -1),]);
+                        }}
+                        options={conditions}
+                        getOptionLabel={(option) => option}
+                        renderTags={(tagValue, getTagProps) =>
+                            tagValue.map((option, index) => (
+                                <Chip
+                                    label={option}
+                                    {...getTagProps({ index })}
+                                />
+                            ))
+                        }
+                        style={{ width: 250 }}
+                        renderInput={(params) => (
+                            <TextField {...params} label="Condition" />
+                        )}
                     />
                 </Stack>
             </Box>
+            <Box
+                sx={{
+                    mt: 2,
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    bgcolor: "red",
+                }}
+            >
+                <Grid container spacing={1}>
+                    asdas
+                </Grid>
+            </Box>
+
         </Container>
     );
 };
