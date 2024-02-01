@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Autocomplete, Box, Chip, Grid, Slider, Stack, TextField } from "@mui/material";
+import { Autocomplete, Box, Chip, Grid, Slider, TextField } from "@mui/material";
 import { Container } from "@mui/system";
 import { request } from "../helpers/axios_helper";
 import { ItemCard } from "../components/Card";

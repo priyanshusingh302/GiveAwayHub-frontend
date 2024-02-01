@@ -16,7 +16,7 @@ const GiveAway = () => {
 
     const authState = useContext(AuthContext).state;
 
-    const [imagePreview, setImagePreview] = useState(srcImg);
+    const [imagePreview, setImagePreview] = useState("https://www.shutterstock.com/image-vector/image-icon-trendy-flat-style-600nw-643080895.jpg");
     const [image, setImage] = useState(null);
 
     const [form, setForm] = React.useState({
@@ -35,17 +35,28 @@ const GiveAway = () => {
             description: form.description,
             condition: form.condition,
             category: form.category,
-            yearOfUse: form.yearOfUse
+            yearOfUse: form.yearOfUse,
+            file: image
         }
         console.log(data);
-        const response = await request("post", "/item/add", data);
-        if (response.success) {
-            alert("Item posted!!");
-            return null;
-        }
-        else {
-            alert("Error!!");
-        }
+        axios.post(
+            `${axios.defaults.baseURL}/item/add`,
+            data,
+            {
+                headers: {
+                    "Authorization": `Bearer ${getAuthToken()}`,
+                    "Content-type": "multipart/form-data",
+                },
+            }
+        )
+            .then(res => {
+                console.log(`Success:` + res.data);
+                alert("Item posted!!");
+            })
+            .catch(err => {
+                console.log(err);
+                alert("Error!!");
+            })
     }
 
     const handleFormChange = (e) => {
@@ -54,30 +65,6 @@ const GiveAway = () => {
             [e.target.name]: e.target.value
         });
         console.log(form);
-    }
-
-    const handelUpload = () => {
-        if (image !== null) {
-            let formData = new FormData();
-            formData.append("file", image);
-            formData.append("referenceId", authState.data?.id);
-            axios.post(
-                'http://localhost:8080/image/upload',
-                formData,
-                {
-                    headers: {
-                        "Authorization": `Bearer ${getAuthToken()}`,
-                        "Content-type": "multipart/form-data",
-                    },
-                }
-            )
-                .then(res => {
-                    console.log(`Success:` + res.data);
-                })
-                .catch(err => {
-                    console.log(err);
-                })
-        }
     }
 
 
@@ -100,7 +87,7 @@ const GiveAway = () => {
                                     width: 250
                                 }}
                                 src={imagePreview}
-                                alt="No Profile Photo"
+                                alt="Not Present"
                             />
                         </Box>
                         <Button
@@ -112,7 +99,7 @@ const GiveAway = () => {
                                 accept="image/*"
                                 type="file"
                                 hidden
-                                onChange={(newImage) => (setImagePreview(URL.createObjectURL(newImage.target.files[0])))}
+                                onChange={(newImage) => { setImagePreview(URL.createObjectURL(newImage.target.files[0])); setImage(newImage.target.files[0]) }}
                             />
                         </Button>
                     </Box>

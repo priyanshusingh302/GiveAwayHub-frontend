@@ -14,12 +14,8 @@ import axios from "axios";
 
 
 const ProfilePage = () => {
-    const randomImageId = Math.floor(Math.random() * 1000) + 1;
-    // const srcImg = `https://picsum.photos/id/${randomImageId}/300/200`;
 
     const authState = useContext(AuthContext).state;
-
-
     const [imagePreview, setImagePreview] = useState(null);
     const [image, setImage] = useState(null);
 
@@ -165,7 +161,7 @@ const ProfilePage = () => {
                                     width: 250
                                 }}
                                 src={imagePreview}
-                                alt="Profile picture"
+                                alt="Profile"
                             />
                         </Box>
                         <Button
