@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Autocomplete, Box, Chip, Grid, Slider, Stack, TextField } from "@mui/material";
 import { Container } from "@mui/system";
 import { request } from "../helpers/axios_helper";
+import { ItemCard } from "../components/Card";
 
 const marks = [
     {
@@ -55,65 +56,69 @@ const ItemsPage = () => {
                         sx={{ bgcolor: "#EAF4FF", borderRadius: 1 }}
                     />
                 </Box>
-                <Stack direction="row" spacing={5}>
-                    <Autocomplete
-                        multiple
-                        id="fixed-tags-demo"
-                        value={categoryList}
-                        onChange={(event, newValue) => {
-                            setCatL([...fixedOptions1,
-                            ...newValue.filter((option) => fixedOptions1.indexOf(option) === -1),]);
-                        }}
-                        options={categories}
-                        getOptionLabel={(option) => option}
-                        renderTags={(tagValue, getTagProps) =>
-                            tagValue.map((option, index) => (
-                                <Chip
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                />
-                            ))
-                        }
-                        style={{ width: 250 }}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Category" />
-                        )}
-                    />
-                    <Box sx={{ width: 250, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", }}>
-                        <Slider
-                            marks={marks} min={0} max={10}
-                            getAriaLabel={() => 'Year of use'}
-                            value={value}
-                            onChange={(newval) => (setValue(newval.target.value))}
-                            valueLabelDisplay="auto"
-                            getAriaValueText={(val) => `${val} Year`}
+                <Grid container spacing={5}>
+                    <Grid item xl={4} xs={12} md={4} lg={4}>
+                        <Autocomplete
+                            multiple
+                            id="fixed-tags-demo"
+                            value={categoryList}
+                            onChange={(event, newValue) => {
+                                setCatL([...fixedOptions1,
+                                ...newValue.filter((option) => fixedOptions1.indexOf(option) === -1),]);
+                            }}
+                            options={categories}
+                            getOptionLabel={(option) => option}
+                            renderTags={(tagValue, getTagProps) =>
+                                tagValue.map((option, index) => (
+                                    <Chip
+                                        label={option}
+                                        {...getTagProps({ index })}
+                                    />
+                                ))
+                            }
+                            style={{ width: 250 }}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Category" />
+                            )}
                         />
-                    </Box>
-
-                    <Autocomplete
-                        multiple
-                        id="fixed-tags-demo"
-                        value={conditionList}
-                        onChange={(event, newValue) => {
-                            setConL([...fixedOptions2,
-                            ...newValue.filter((option) => fixedOptions2.indexOf(option) === -1),]);
-                        }}
-                        options={conditions}
-                        getOptionLabel={(option) => option}
-                        renderTags={(tagValue, getTagProps) =>
-                            tagValue.map((option, index) => (
-                                <Chip
-                                    label={option}
-                                    {...getTagProps({ index })}
-                                />
-                            ))
-                        }
-                        style={{ width: 250 }}
-                        renderInput={(params) => (
-                            <TextField {...params} label="Condition" />
-                        )}
-                    />
-                </Stack>
+                    </Grid>
+                    <Grid item xl={4} xs={12} md={4} lg={4}>
+                        <Box sx={{ width: 250, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", }}>
+                            <Slider
+                                marks={marks} min={0} max={10}
+                                getAriaLabel={() => 'Year of use'}
+                                value={value}
+                                onChange={(newval) => (setValue(newval.target.value))}
+                                valueLabelDisplay="auto"
+                                getAriaValueText={(val) => `${val} Year`}
+                            />
+                        </Box></Grid>
+                    <Grid item xl={4} xs={12} md={4} lg={4}>
+                        <Autocomplete
+                            multiple
+                            id="fixed-tags-demo"
+                            value={conditionList}
+                            onChange={(event, newValue) => {
+                                setConL([...fixedOptions2,
+                                ...newValue.filter((option) => fixedOptions2.indexOf(option) === -1),]);
+                            }}
+                            options={conditions}
+                            getOptionLabel={(option) => option}
+                            renderTags={(tagValue, getTagProps) =>
+                                tagValue.map((option, index) => (
+                                    <Chip
+                                        label={option}
+                                        {...getTagProps({ index })}
+                                    />
+                                ))
+                            }
+                            style={{ width: 250 }}
+                            renderInput={(params) => (
+                                <TextField {...params} label="Condition" />
+                            )}
+                        />
+                    </Grid>
+                </Grid>
             </Box>
             <Box
                 sx={{
@@ -121,11 +126,19 @@ const ItemsPage = () => {
                     width: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    bgcolor: "red",
+                    border: 1,
+                    borderRadius: 1,
+                    borderColor: "#DDDDDD",
+                    padding: 1
                 }}
             >
-                <Grid container spacing={1}>
-                    asdas
+                <Grid container spacing={2} >
+                    {items.map(item =>
+                    (
+                        <Grid item xl={4} xs={12} md={12} lg={6}>
+                            <ItemCard item={item} />
+                        </Grid>
+                    ))}
                 </Grid>
             </Box>
 
