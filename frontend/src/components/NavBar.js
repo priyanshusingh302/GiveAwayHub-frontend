@@ -48,7 +48,7 @@ function NavBar() {
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             <Button color="inherit">
               <Link to="/items" style={{ textDecoration: 'none', color: 'inherit' }}>
-                Products
+                Market
               </Link>
             </Button>
           </Box>
