@@ -36,6 +36,7 @@ export const request = async (method, url, data) => {
         if (err.response.data?.message ===  "Unauthorized path") {
             removeAuthToken();
             window.localStorage.removeItem('user');
+            window.location.href = 'http://localhost:3000/login';
         }
         return { success: false, data: {} };
     }

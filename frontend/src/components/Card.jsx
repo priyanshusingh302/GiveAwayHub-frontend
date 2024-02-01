@@ -21,7 +21,7 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export const ItemCard = ({ item, remove }) => {
+export const ItemCard = ({ item }) => {
 
     const authState = useContext(AuthContext).state;
     const [open, setOpen] = useState(false);
@@ -115,7 +115,7 @@ export const ItemCard = ({ item, remove }) => {
                 open={open}
                 fullWidth={true}
             >
-                <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                <DialogTitle sx={{ ml: 2, p: 1 }} id="customized-dialog-title">
                     {item.name}
                 </DialogTitle>
                 <IconButton
@@ -132,7 +132,7 @@ export const ItemCard = ({ item, remove }) => {
                 </IconButton>
                 <DialogContent dividers>
                     <Box minHeight={55} sx={{ padding: 1, display: "flex" }} >
-                        <Box width={215} height={215} sx={{
+                        <Box width={300} height={300} sx={{
                             bgcolor: "white", display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
@@ -143,8 +143,8 @@ export const ItemCard = ({ item, remove }) => {
                             <img
                                 style={{
                                     objectFit: "fill",
-                                    height: 215,
-                                    width: 215
+                                    height: 300,
+                                    width: 300
                                 }}
                                 src={`${axios.defaults.baseURL}/image/${item.id}`}
                                 alt={`Item:${item.name}`}
@@ -155,14 +155,14 @@ export const ItemCard = ({ item, remove }) => {
                                 variant="h7"
                                 fontFamily={"unset"}
                             >
-                                Category: <i>{item.category}</i>
+                                <b>Category:</b> {item.category}
                             </Typography>
                             <br />
                             <Typography
                                 variant="h7"
                                 fontFamily={"unset"}
                             >
-                                Condition: <i>{item.condition}</i>
+                                <b>Condition:</b> <i>{item.condition}</i>
                             </Typography>
                             <br /><Typography
                                 variant="h7"
@@ -172,7 +172,7 @@ export const ItemCard = ({ item, remove }) => {
                             </Typography>
                             <br />
                             <Typography
-                                fontSize={12}
+                                fontSize={14}
                                 fontFamily={"unset"}
                             >
                                 {item.description}

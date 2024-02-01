@@ -3,7 +3,6 @@ import { Autocomplete, Box, Chip, Grid, Slider, TextField } from "@mui/material"
 import { Container } from "@mui/system";
 import { request } from "../helpers/axios_helper";
 import { ItemCard } from "../components/Card";
-import { useStore } from "zustand";
 
 const marks = [
     {
@@ -28,17 +27,9 @@ const ItemsPage = () => {
     const [categoryList, setCatL] = useState([]);
     const [conditionList, setConL] = useState([]);
     const [items, setItems] = useState([]);
-    // const items = useStore((state) => state.items);
-    // const setItems = useStore((state) => state.setItems);
     const fixedOptions1 = [];
     const fixedOptions2 = [];
 
-    const removeItem = (item) => {
-        const index = items.indexOf(item);
-        if (index > -1) {
-            items.splice(index, 1);
-        }
-    }
 
     const getItems = async () => {
         const response = await request("get", "/item/all", null);
@@ -58,14 +49,14 @@ const ItemsPage = () => {
 
     return (
         <Container maxWidth="xl" sx={{ minHeight: "90vh", mt: 1, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center" }}>
-            <Box sx={{ bgcolor: "#D9EBFF", borderRadius: 2, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", mt: 1, p: 1, boxShadow: 1 }}>
+            <Box sx={{ bgcolor: "#EAEAEA", borderRadius: 2, display: "flex", flexDirection: "column", alignContent: "center", alignItems: "center", mt: 1, p: 1, boxShadow: 1 }}>
                 <Box width={"100%"} mb={1}>
                     <TextField
                         size="small"
                         fullWidth
                         onChange={(newVal) => (setSearchValue(newVal.target.value))}
                         label="Search"
-                        sx={{ bgcolor: "#EAF4FF", borderRadius: 1 }}
+                        sx={{ bgcolor: "white", borderRadius: 1 }}
                     />
                 </Box>
                 <Grid container spacing={5}>
@@ -157,7 +148,7 @@ const ItemsPage = () => {
                     ).map(item =>
                     (
                         <Grid item xl={4} xs={12} md={12} lg={6}>
-                            <ItemCard item={item} remove={removeItem} />
+                            <ItemCard item={item} />
                         </Grid>
                     ))}
                 </Grid>
