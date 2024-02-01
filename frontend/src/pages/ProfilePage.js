@@ -54,17 +54,7 @@ const ProfilePage = () => {
             else {
                 console.log("Error!!!")
             }
-            const img = await request("get", `/image/${authState.data.id}`, null);
-            if (img.success) {
-                // console.log(img.data);
-                const blob = new Blob([img.data], { type: 'image/png' });
-                console.log(blob);
-                // const imgURL = URL.createObjectURL(`data:image/png;base64,${blob}`);
-                // setImagePreview(imgURL);
-            }
-            else {
-                console.log("Image fetch failed!!")
-            }
+            setImagePreview(`${axios.defaults.baseURL}/image/${authState.data.id}`)
         }
     }
 
@@ -136,7 +126,7 @@ const ProfilePage = () => {
             formData.append("file", image);
             formData.append("referenceId", authState.data?.id);
             axios.post(
-                'http://localhost:8080/image/upload',
+                `${axios.defaults.baseURL}/image/upload`,
                 formData,
                 {
                     headers: {
@@ -175,7 +165,7 @@ const ProfilePage = () => {
                                     width: 250
                                 }}
                                 src={imagePreview}
-                                alt="No Profile Photo"
+                                alt="Profile picture"
                             />
                         </Box>
                         <Button
