@@ -12,6 +12,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { Link, useNavigate } from 'react-router-dom';
 import AuthContext from '../helpers/AuthContext';
 import { removeAuthToken } from '../helpers/axios_helper';
+import axios from 'axios';
 
 
 function AuthNavBar() {
@@ -89,7 +90,7 @@ function AuthNavBar() {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Profile" >
                             <IconButton sx={{ p: 0, marginLeft: 1, marginRight: 1 }} onClick={() => (navigate('/profile'))}>
-                                <Avatar alt={authState.data.firstName} src="/static/images/avatar/2.jpg" />
+                                <Avatar alt={authState.data.firstName} src={`${axios.defaults.baseURL}/image/${authState.data.id}`} />
                             </IconButton>
                         </Tooltip>
                     </Box>
