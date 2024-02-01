@@ -44,7 +44,7 @@ function AuthNavBar() {
                         cursor: "pointer",
                         overflow: "hidden"
                     }}
-                        onClick={() => (navigate("/home"))}
+                        onClick={() => (navigate("/items"))}
                     >
                         <Typography
                             variant="h6"

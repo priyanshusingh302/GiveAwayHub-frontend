@@ -1,7 +1,6 @@
 import './App.css';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NoPage from "./pages/NoPage";
-import Home from './pages/Home';
 import Login from './pages/LoginPage';
 import Layout from './pages/LayoutPage';
 import Signup from './pages/SignupPage';
@@ -21,8 +20,12 @@ function App() {
     <BrowserRouter>
       {!authState.isLoggedIn ? <NavBar /> : <AuthNavBar />}
       <Routes>
+        <Route
+          path=""
+          element={<Navigate to="/items" />}
+        />
+
         <Route path="/" element={<Layout />}>
-          <Route path="home" element={<Home />} />
           <Route path="login" element={<Login />} />
           <Route path="items" element={<ItemsPage />} />
           <Route path="signup" element={<Signup />} />
